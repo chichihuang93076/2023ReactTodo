@@ -1,10 +1,11 @@
 import axios from "axios";
-import { useEffect } from "react";
-import { NavLink, useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const Home = () => {
   const { VITE_APP_APIURL } = import.meta.env;
   const navigate = useNavigate();
+  const [status, setStatus] = useState(false);
 
   useEffect(() => {
     // 取得 Cookie
@@ -12,7 +13,6 @@ const Home = () => {
       .split("; ")
       .find((row) => row.startsWith("todotoken="))
       ?.split("=")[1];
-
     // 預設 axios 的表頭
     axios.defaults.headers.common["Authorization"] = cookieValue;
 
@@ -21,7 +21,8 @@ const Home = () => {
       .get(`${VITE_APP_APIURL}/users/checkout`)
       .then((res) => {
         console.log(res);
-        navigate("/todo");
+        setStatus(true);
+        //navigate("/todo");
       })
       .catch((err) => {
         console.log("登入失敗啦", err);
@@ -33,7 +34,8 @@ const Home = () => {
 
   return (
     <div>
-      home <NavLink to="/auth/login">登入</NavLink>{" "}
+      {status && navigate("/todo")}
+      {!status && navigate("/auth/login")}
     </div>
   );
 };
