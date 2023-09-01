@@ -13,8 +13,8 @@ const Todo = () => {
   const [message, setMessage] = useState("");
   const [content, setContent] = useState("");
   const [todos, setTodos] = useState([]);
-  const [todoList, setTodoList] = useState([]);
   const [tabStatus, setTabStatus] = useState("全部");
+  const [username, setUsername] = useState("");
 
   // 預設 axios 的表頭
   axios.defaults.headers.common["Authorization"] = cookieValue;
@@ -25,6 +25,7 @@ const Todo = () => {
       .get(`${VITE_APP_APIURL}/users/checkout`)
       .then((res) => {
         console.log(res);
+        setUsername(res.data.nickname);
         getTodos();
       })
       .catch((err) => {
@@ -42,7 +43,7 @@ const Todo = () => {
       },
     });
     setTodos(res.data.data);
-    console.log(res.data.data);
+    //console.log(res.data.data);
   };
 
   //新增代辦事項
@@ -92,25 +93,43 @@ const Todo = () => {
   };
 
   //處理todolist
-  const handleTodoList = (tabStatus) => {
-    const filterTodoList = todos.filter((item) => {
-      tabStatus === "待完成"
-        ? !item.status
-        : tabStatus === "已完成"
-        ? item.status
-        : "";
-    });
-    console.log(filterTodoList);
+  const TodoList = ({ todolist, stts }) => {
+    const filterTodoList = todolist?.filter((item) =>
+      stts === "待完成" ? !item.status : stts === "已完成" ? item.status : item
+    );
+    //console.log(filterTodoList);
+
+    return filterTodoList.map((todo, index) => (
+      <li key={index}>
+        <label className="todoList_label">
+          <input
+            className="todoList_input"
+            type="checkbox"
+            value={todo.status}
+            checked={todo.status}
+            onChange={() => toggleTodo(todo.id)}
+          />
+          <span>{todo.content}</span>
+        </label>
+        <a onClick={() => handleTodobyid(todo.id)}>
+          <i className="fa fa-times"></i>
+        </a>
+      </li>
+    ));
+  };
+
+  const NoTodo = () => {
+    return (
+      <li>
+        <span>沒有TODO資料</span>
+      </li>
+    );
   };
 
   const handleTabStatus = (e) => {
     const { name } = e.target;
     //console.log(name, value);
     setTabStatus(name);
-    const filterTodoList = todos.filter((item) => {
-      name === "待完成" ? !item.status : name === "已完成" ? item.status : "";
-    });
-    console.log(filterTodoList);
   };
 
   //變更todo狀態
@@ -119,7 +138,6 @@ const Todo = () => {
       const res = await axios.patch(`${VITE_APP_APIURL}/todos/${id}/toggle`);
       console.log(res.data.status);
       getTodos();
-      handleTodoList(tabStatus);
     } catch (error) {
       setMessage(error.mssage);
     }
@@ -139,6 +157,7 @@ const Todo = () => {
       );
 
       if (res.data.status) {
+        document.cookie = "todotoken=";
         navigate("/auth/login");
       } else {
         setMessage("登出失敗:" + res.data.message);
@@ -157,14 +176,12 @@ const Todo = () => {
         </h1>
         <ul>
           <li className="todo_sm">
-            <a href="#">
-              <span>王小明的代辦</span>
+            <a>
+              <span>{username}的代辦</span>
             </a>
           </li>
           <li>
-            <a href="#" onClick={signOut}>
-              登出
-            </a>
+            <a onClick={signOut}>登出</a>
           </li>
         </ul>
       </nav>
@@ -178,7 +195,7 @@ const Todo = () => {
               value={content}
               onChange={(e) => setContent(e.target.value)}
             />
-            <a href="#" onClick={addTodo}>
+            <a onClick={addTodo}>
               <i className="fa fa-plus"></i>
             </a>
           </div>
@@ -214,24 +231,11 @@ const Todo = () => {
             </ul>
             <div className="todoList_items">
               <ul className="todoList_item">
-                {todos.length > 0 &&
-                  todos.map((todo, index) => (
-                    <li key={index}>
-                      <label className="todoList_label">
-                        <input
-                          className="todoList_input"
-                          type="checkbox"
-                          value={todo.status}
-                          checked={todo.status}
-                          onChange={() => toggleTodo(todo.id)}
-                        />
-                        <span>{todo.content}</span>
-                      </label>
-                      <a href="#" onClick={() => handleTodobyid(todo.id)}>
-                        <i className="fa fa-times"></i>
-                      </a>
-                    </li>
-                  ))}
+                {todos.length > 0 ? (
+                  <TodoList todolist={todos} stts={tabStatus} />
+                ) : (
+                  <NoTodo />
+                )}
               </ul>
               <div className="todoList_statistics">
                 <p>
