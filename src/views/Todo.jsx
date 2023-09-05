@@ -55,6 +55,7 @@ const Todo = () => {
       //console.log(res.data.status);
       if (res.data.status) {
         setContent("");
+        setTabStatus("全部");
         getTodos();
         //setMessage("新增成功");
       } else {
@@ -122,7 +123,11 @@ const Todo = () => {
     return (
       <div className="emptyList">
         <h6 className="emptytext">目前尚無待辦事項</h6>
-        <img className="emptypic" src="/empty1.png" alt="empty1" />
+        <img
+          className="emptypic"
+          src="/2023ReactTodo/empty1.png"
+          alt="empty1"
+        />
       </div>
     );
   };

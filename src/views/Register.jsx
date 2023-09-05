@@ -18,6 +18,13 @@ const Register = () => {
       signUp();
     } else {
       setMessage("密碼輸入不一致請再次確認");
+      Swal.fire({
+        icon: "warning",
+        title: "訊息",
+        text: "密碼輸入不一致請再次確認",
+        timer: 2000,
+        timerProgressBar: true,
+      });
     }
   };
 
@@ -35,7 +42,8 @@ const Register = () => {
       console.log(error.response.data.message);
       setMessage("註冊失敗:" + error.message);
       Swal.fire({
-        title: "註冊失敗，" + error.response.data.message,
+        title: "註冊失敗",
+        text: error.response.data.message,
         icon: "error",
         showConfirmButton: false,
         timer: 1500,
