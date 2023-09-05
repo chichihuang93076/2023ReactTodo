@@ -120,9 +120,10 @@ const Todo = () => {
 
   const NoTodo = () => {
     return (
-      <li>
-        <span>沒有TODO資料</span>
-      </li>
+      <div className="emptyList">
+        <h6 className="emptytext">目前尚無待辦事項</h6>
+        <img className="emptypic" src="/empty1.png" alt="empty1" />
+      </div>
     );
   };
 
@@ -199,54 +200,54 @@ const Todo = () => {
               <i className="fa fa-plus"></i>
             </a>
           </div>
-          <div className="todoList_list">
-            <ul className="todoList_tab">
-              <li>
-                <a
-                  className={tabStatus === "全部" ? "active" : ""}
-                  name="全部"
-                  onClick={(e) => handleTabStatus(e)}
-                >
-                  全部
-                </a>
-              </li>
-              <li>
-                <a
-                  name="待完成"
-                  className={tabStatus === "待完成" ? "active" : ""}
-                  onClick={(e) => handleTabStatus(e)}
-                >
-                  待完成
-                </a>
-              </li>
-              <li>
-                <a
-                  name="已完成"
-                  className={tabStatus === "已完成" ? "active" : ""}
-                  onClick={(e) => handleTabStatus(e)}
-                >
-                  已完成
-                </a>
-              </li>
-            </ul>
-            <div className="todoList_items">
-              <ul className="todoList_item">
-                {todos.length > 0 ? (
-                  <TodoList todolist={todos} stts={tabStatus} />
-                ) : (
-                  <NoTodo />
-                )}
+          {todos.length > 0 ? (
+            <div className="todoList_list">
+              <ul className="todoList_tab">
+                <li>
+                  <a
+                    className={tabStatus === "全部" ? "active" : ""}
+                    name="全部"
+                    onClick={(e) => handleTabStatus(e)}
+                  >
+                    全部
+                  </a>
+                </li>
+                <li>
+                  <a
+                    name="待完成"
+                    className={tabStatus === "待完成" ? "active" : ""}
+                    onClick={(e) => handleTabStatus(e)}
+                  >
+                    待完成
+                  </a>
+                </li>
+                <li>
+                  <a
+                    name="已完成"
+                    className={tabStatus === "已完成" ? "active" : ""}
+                    onClick={(e) => handleTabStatus(e)}
+                  >
+                    已完成
+                  </a>
+                </li>
               </ul>
-              <div className="todoList_statistics">
-                <p>
-                  {todos.filter((item) => !item.status).length} 個未完成項目
-                </p>
-                <a href="#" onClick={() => handleDeleteTodos()}>
-                  清除已完成項目
-                </a>
+              <div className="todoList_items">
+                <ul className="todoList_item">
+                  <TodoList todolist={todos} stts={tabStatus} />
+                </ul>
+                <div className="todoList_statistics">
+                  <p>
+                    {todos.filter((item) => !item.status).length} 個未完成項目
+                  </p>
+                  <a href="#" onClick={() => handleDeleteTodos()}>
+                    清除已完成項目
+                  </a>
+                </div>
               </div>
             </div>
-          </div>
+          ) : (
+            <NoTodo />
+          )}
         </div>
       </div>
     </div>

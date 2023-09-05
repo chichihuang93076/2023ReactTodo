@@ -684,4 +684,19 @@ nav ul a span {
   text-decoration: none;
 }
 
+.emptyList {
+  display: flex;
+  flex-direction: column;
+}
+.emptyList .emptytext {
+  text-align: center;
+  margin-top: 100px;
+  margin-bottom: 16px;
+}
+.emptyList .emptypic {
+  width: 240px;
+  display: block;
+  margin: auto;
+}
+
 /*# sourceMappingURL=all.css.map */

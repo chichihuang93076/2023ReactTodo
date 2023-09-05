@@ -620,4 +620,20 @@ nav ul a span {
   font-size: 0.875rem;
   text-decoration: none;
 }
+
+.emptyList {
+  display: flex;
+  flex-direction: column;
+  .emptytext {
+    text-align: center;
+    margin-top: 100px;
+    margin-bottom: 16px;
+  }
+  .emptypic {
+    width: 240px;
+    display: block;
+    margin: auto;
+  }
+}
+
 /*# sourceMappingURL=all.css.map */
