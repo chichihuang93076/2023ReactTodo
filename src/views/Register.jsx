@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
 
 const Register = () => {
   const navigate = useNavigate();
@@ -31,8 +32,14 @@ const Register = () => {
       console.log(response.data);
       //setMessage("註冊成功:" + response.data.uid);
     } catch (error) {
-      console.log(error.message);
+      console.log(error.response.data.message);
       setMessage("註冊失敗:" + error.message);
+      Swal.fire({
+        title: "註冊失敗，" + error.response.data.message,
+        icon: "error",
+        showConfirmButton: false,
+        timer: 1500,
+      });
     }
   };
 
